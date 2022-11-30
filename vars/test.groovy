@@ -2,6 +2,7 @@
 
 def call(String name = 'human') {
   echo "Hello, ${name}."
+  echo "Env: ${env}"
 }
 
 //import hudson.model.User
