@@ -1,5 +1,5 @@
 
-def call(List admin_env, String admin_role) {
+def call(Map roleParams) {
     properties([parameters([[$class: 'ChoiceParameter', choiceType: 'PT_SINGLE_SELECT', filterLength: 1, filterable: false, name: 'Env', randomName: 'choice-parameter-4186073374950', script: [$class: 'GroovyScript', fallbackScript: [classpath: [], oldScript: '', sandbox: false, script: ''], script: [classpath: [], oldScript: '', sandbox: false, script: """
 import hudson.model.User
 import hudson.model.Hudson
@@ -21,14 +21,14 @@ if (strategy != null && strategy instanceof com.michelin.cio.hudson.plugins.role
     for (entry in roles) {
         role = entry.key
         users = entry.value
-        if (role.getName().equals("dev")) {
+        if (role.getName().equals("${roleParams.dev_role}")) {
             if (userId in users) {
-                jobs = ["Dev", "Stg"]
+                jobs = ${roleParams.dev_env_list}
                 break
             }
-        } else if (role.getName().equals($admin_role)) {
+        } else if (role.getName().equals("${roleParams.admin_role}")) {
             if (userId in users) {
-                jobs = $admin_env
+                jobs = ${roleParams.admin_env_list}
                 break
             }
         }
