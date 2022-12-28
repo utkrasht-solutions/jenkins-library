@@ -1,4 +1,3 @@
-
 import java.util.*
 import java.lang.reflect.*
 import jenkins.model.Jenkins
@@ -7,12 +6,12 @@ import hudson.security.Permission
 import com.michelin.cio.hudson.plugins.rolestrategy.RoleBasedAuthorizationStrategy
 import com.michelin.cio.hudson.plugins.rolestrategy.Role
 import com.synopsys.arc.jenkins.plugins.rolestrategy.RoleType
+//
+//def userName = params.User_Name
+//def roleName = params.Project_Role_Name
+//def globalroleName = params.Global_Role_Name
 
-def userName = params.User_Name
-def roleName = params.Project_Role_Name
-def globalroleName = params.Global_Role_Name
-
-def findRoleEntry(grantedRoles, roleName) {
+def findRoleEntry(grantedRoles) {
   for (def entry : grantedRoles) {
     Role role = entry.getKey()
 
@@ -24,9 +23,9 @@ def findRoleEntry(grantedRoles, roleName) {
   return null
 }
 
-  def authStrategy = Jenkins.instance.getAuthorizationStrategy()
+def authStrategy = Jenkins.instance.getAuthorizationStrategy()
 
-
+def call(roleName, userName ) {
   if (authStrategy instanceof RoleBasedAuthorizationStrategy) {
     RoleBasedAuthorizationStrategy roleAuthStrategy = (RoleBasedAuthorizationStrategy) authStrategy
 
@@ -106,3 +105,4 @@ def findRoleEntry(grantedRoles, roleName) {
   } else {
     println "Role Strategy Plugin not found!"
   }
+}
