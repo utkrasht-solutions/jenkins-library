@@ -11,7 +11,7 @@ import com.synopsys.arc.jenkins.plugins.rolestrategy.RoleType
 //def roleName = params.Project_Role_Name
 //def globalroleName = params.Global_Role_Name
 
-def findRoleEntry(grantedRoles) {
+def findRoleEntry(grantedRoles, roleName) {
   for (def entry : grantedRoles) {
     Role role = entry.getKey()
 
@@ -106,3 +106,4 @@ def call(roleName, userName ) {
     println "Role Strategy Plugin not found!"
   }
 }
+return this
