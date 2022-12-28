@@ -16,9 +16,11 @@ properties([
           string(name: "Project_Role_Name", trim: true, description: "Global Role name")
         }])
 
-def roleName = params.Project_Role_Name
-def globalroleName = params.Global_Role_Name
-def userName = params.User_Name
+def call(Map vars){
+  roleName = ${vars.roleName}
+  globalroleName = ${vars.globalroleName}
+  userName = ${vars.userName}
+}
 
 def findGuestRoleEntry(grantedRoles, roleName)
 {
