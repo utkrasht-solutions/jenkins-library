@@ -8,19 +8,9 @@ import com.michelin.cio.hudson.plugins.rolestrategy.RoleBasedAuthorizationStrate
 import com.michelin.cio.hudson.plugins.rolestrategy.Role
 import com.synopsys.arc.jenkins.plugins.rolestrategy.RoleType
 
-properties([
-        parameters {
-          string(name: "Access_Request_ID", description: "Jira ticket id only")
-          string(name: "User_Name", description: "user email address or username")
-          string(name: "Global_Role_Name", defaultValue: "readonly", trim: true, description: "Global Role name")
-          string(name: "Project_Role_Name", trim: true, description: "Global Role name")
-        }])
-
-def call(Map vars){
-  roleName = ${vars.roleName}
-  globalroleName = ${vars.globalroleName}
-  userName = ${vars.userName}
-}
+def roleName = params.Project_Role_name
+def userName = params.User_Name
+def globalroleName = params.Global_Role_Name
 
 def findGuestRoleEntry(grantedRoles, roleName)
 {
