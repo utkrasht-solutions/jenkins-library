@@ -8,20 +8,20 @@ import com.michelin.cio.hudson.plugins.rolestrategy.Role
 import com.synopsys.arc.jenkins.plugins.rolestrategy.RoleType
 
 
-def findRoleEntry(grantedRoles, roleName)
-{
-  for (def entry : grantedRoles)
-  {
-    Role role = entry.getKey()
-
-    if (role.getName().equals(roleName))
-    {
-      return entry
-    }
-  }
-
-  return null
-}
+//def findRoleEntry(grantedRoles, roleName)
+//{
+//  for (def entry : grantedRoles)
+//  {
+//    Role role = entry.getKey()
+//
+//    if (role.getName().equals(roleName))
+//    {
+//      return entry
+//    }
+//  }
+//
+//  return null
+//}
 
 def call(Map roles = [:]) {
 
