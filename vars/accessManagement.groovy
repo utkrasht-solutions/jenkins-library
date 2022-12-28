@@ -8,9 +8,17 @@ import com.michelin.cio.hudson.plugins.rolestrategy.Role
 import com.synopsys.arc.jenkins.plugins.rolestrategy.RoleType
 
 
-def roleName = "job2"
-def userName = "test-user-1"
-def globalroleName = "readonly"
+def roleName(String roleName = 'admin') {
+  return ${roleName}
+}
+
+def globalroleName(String globalroleName = 'admin') {
+  return ${globalroleName}
+}
+
+def userName(String userName = 'admin') {
+  return ${userName}
+}
 
 def findGuestRoleEntry(grantedRoles, roleName)
 {
