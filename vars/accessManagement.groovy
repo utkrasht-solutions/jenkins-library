@@ -1,4 +1,3 @@
-
 import java.util.*
 import java.lang.reflect.*
 import jenkins.model.Jenkins
@@ -8,9 +7,9 @@ import com.michelin.cio.hudson.plugins.rolestrategy.RoleBasedAuthorizationStrate
 import com.michelin.cio.hudson.plugins.rolestrategy.Role
 import com.synopsys.arc.jenkins.plugins.rolestrategy.RoleType
 
-def roleName = params.Project_Role_name
-def userName = params.User_Name
-def globalroleName = params.Global_Role_Name
+def roleName = ''
+def userName = ''
+def globalroleName = 'readonly'
 
 def findGuestRoleEntry(grantedRoles, roleName)
 {
@@ -114,4 +113,3 @@ if(authStrategy instanceof RoleBasedAuthorizationStrategy){
 } else {
   println "Role Strategy Plugin not found!"
 }
-
