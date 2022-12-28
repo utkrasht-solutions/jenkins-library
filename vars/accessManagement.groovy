@@ -1,3 +1,4 @@
+
 import java.util.*
 import java.lang.reflect.*
 import jenkins.model.Jenkins
@@ -6,10 +7,17 @@ import hudson.security.Permission
 import com.michelin.cio.hudson.plugins.rolestrategy.RoleBasedAuthorizationStrategy
 import com.michelin.cio.hudson.plugins.rolestrategy.Role
 import com.synopsys.arc.jenkins.plugins.rolestrategy.RoleType
-//
-//def userName = params.User_Name
-//def roleName = params.Project_Role_Name
-//def globalroleName = params.Global_Role_Name
+
+properties([parameters([
+        string(name: "Access_Request_ID", description: "Jira ticket id only"),
+        string(name: "User_Name", description: "user email address or username"),
+        string(name: "Global_Role_Name", defaultValue: "readonly", trim: true, description: "Global Role name"),
+        string(name: "Project_Role_Name", trim: true, description: "Global Role name")
+])])
+
+def userName = params.User_Name
+def roleName = params.Project_Role_Name
+def globalroleName = params.Global_Role_Name
 
 def findRoleEntry(grantedRoles, roleName) {
   for (def entry : grantedRoles) {
@@ -25,85 +33,82 @@ def findRoleEntry(grantedRoles, roleName) {
 
 def authStrategy = Jenkins.instance.getAuthorizationStrategy()
 
-def call(roleName, userName ) {
-  if (authStrategy instanceof RoleBasedAuthorizationStrategy) {
-    RoleBasedAuthorizationStrategy roleAuthStrategy = (RoleBasedAuthorizationStrategy) authStrategy
+if (authStrategy instanceof RoleBasedAuthorizationStrategy) {
+  RoleBasedAuthorizationStrategy roleAuthStrategy = (RoleBasedAuthorizationStrategy) authStrategy
 
-    // Make constructors available
-    Constructor[] constrs = Role.class.getConstructors();
-    for (Constructor<?> c : constrs) {
-      c.setAccessible(true);
-    }
-    // Make the method assignRole accessible for Project role
-    Method assignRoleMethod = RoleBasedAuthorizationStrategy.class.getDeclaredMethod("assignRole", RoleType.class, Role.class, String.class);
-    assignRoleMethod.setAccessible(true);
+  // Make constructors available
+  Constructor[] constrs = Role.class.getConstructors();
+  for (Constructor<?> c : constrs) {
+    c.setAccessible(true);
+  }
+  // Make the method assignRole accessible for Project role
+  Method assignRoleMethod = RoleBasedAuthorizationStrategy.class.getDeclaredMethod("assignRole", RoleType.class, Role.class, String.class);
+  assignRoleMethod.setAccessible(true);
 
-    def grantedRoles = authStrategy.getGrantedRoles(RoleBasedAuthorizationStrategy.PROJECT);
-    if (grantedRoles != null) {
-      // println "Got grantedRoles for " + RoleBasedAuthorizationStrategy.PROJECT
+  def grantedRoles = authStrategy.getGrantedRoles(RoleBasedAuthorizationStrategy.PROJECT);
+  if (grantedRoles != null) {
+    // println "Got grantedRoles for " + RoleBasedAuthorizationStrategy.PROJECT
 
-      def roleEntry = findRoleEntry(grantedRoles, roleName);
-      if (roleEntry != null) {
-        // println "Found role " + roleName
+    def roleEntry = findRoleEntry(grantedRoles, roleName);
+    if (roleEntry != null) {
+      // println "Found role " + roleName
 
-        def sidList = roleEntry.getValue()
-        if (sidList.contains(userName)) {
-          println "User " + userName + " already assigned to role " + roleName
-        } else {
-          println "Adding user " + userName + " to role " + roleName
-          roleAuthStrategy.assignRole(RoleType.fromString(RoleBasedAuthorizationStrategy.PROJECT), roleEntry.getKey(), userName);
-          println "OK"
-        }
-
-        Jenkins.instance.save()
+      def sidList = roleEntry.getValue()
+      if (sidList.contains(userName)) {
+        println "User " + userName + " already assigned to role " + roleName
       } else {
-        println "Unable to find role " + roleName
+        println "Adding user " + userName + " to role " + roleName
+        roleAuthStrategy.assignRole(RoleType.fromString(RoleBasedAuthorizationStrategy.PROJECT), roleEntry.getKey(), userName);
+        println "OK"
       }
+
+      Jenkins.instance.save()
     } else {
-      println "Unable to find grantedRoles for " + RoleBasedAuthorizationStrategy.PROJECT
+      println "Unable to find role " + roleName
     }
   } else {
-    println "Role Strategy Plugin not found!"
+    println "Unable to find grantedRoles for " + RoleBasedAuthorizationStrategy.PROJECT
   }
-
-  if (authStrategy instanceof RoleBasedAuthorizationStrategy) {
-    RoleBasedAuthorizationStrategy roleAuthStrategy = (RoleBasedAuthorizationStrategy) authStrategy
-
-    // Make constructors available
-    Constructor[] constrs = Role.class.getConstructors();
-    for (Constructor<?> c : constrs) {
-      c.setAccessible(true);
-    }
-    // Make the method assignRole accessible for Project role
-    Method assignRoleMethod = RoleBasedAuthorizationStrategy.class.getDeclaredMethod("assignRole", RoleType.class, Role.class, String.class);
-    assignRoleMethod.setAccessible(true);
-
-    def grantedRoles = authStrategy.getGrantedRoles(RoleBasedAuthorizationStrategy.GLOBAL);
-    if (grantedRoles != null) {
-      println "Got grantedRoles for " + RoleBasedAuthorizationStrategy.GLOBAL
-
-      def roleEntry = findRoleEntry(grantedRoles, globalroleName);
-      if (roleEntry != null) {
-        println "Found role " + globalroleName
-
-        def sidList = roleEntry.getValue()
-        if (sidList.contains(userName)) {
-          println "User " + userName + " already assigned to Global role " + globalroleName
-        } else {
-          println "Adding user " + userName + " to Global role " + globalroleName
-          roleAuthStrategy.assignRole(RoleType.fromString(RoleBasedAuthorizationStrategy.GLOBAL), roleEntry.getKey(), userName);
-          println "OK"
-        }
-
-        Jenkins.instance.save()
-      } else {
-        println "Unable to find Global role " + globalroleName
-      }
-    } else {
-      println "Unable to find grantedRoles for " + RoleBasedAuthorizationStrategy.GLOBAL
-    }
-  } else {
-    println "Role Strategy Plugin not found!"
-  }
+} else {
+  println "Role Strategy Plugin not found!"
 }
-return this
+
+if (authStrategy instanceof RoleBasedAuthorizationStrategy) {
+  RoleBasedAuthorizationStrategy roleAuthStrategy = (RoleBasedAuthorizationStrategy) authStrategy
+
+  // Make constructors available
+  Constructor[] constrs = Role.class.getConstructors();
+  for (Constructor<?> c : constrs) {
+    c.setAccessible(true);
+  }
+  // Make the method assignRole accessible for Project role
+  Method assignRoleMethod = RoleBasedAuthorizationStrategy.class.getDeclaredMethod("assignRole", RoleType.class, Role.class, String.class);
+  assignRoleMethod.setAccessible(true);
+
+  def grantedRoles = authStrategy.getGrantedRoles(RoleBasedAuthorizationStrategy.GLOBAL);
+  if (grantedRoles != null) {
+    println "Got grantedRoles for " + RoleBasedAuthorizationStrategy.GLOBAL
+
+    def roleEntry = findRoleEntry(grantedRoles, globalroleName);
+    if (roleEntry != null) {
+      println "Found role " + globalroleName
+
+      def sidList = roleEntry.getValue()
+      if (sidList.contains(userName)) {
+        println "User " + userName + " already assigned to Global role " + globalroleName
+      } else {
+        println "Adding user " + userName + " to Global role " + globalroleName
+        roleAuthStrategy.assignRole(RoleType.fromString(RoleBasedAuthorizationStrategy.GLOBAL), roleEntry.getKey(), userName);
+        println "OK"
+      }
+
+      Jenkins.instance.save()
+    } else {
+      println "Unable to find Global role " + globalroleName
+    }
+  } else {
+    println "Unable to find grantedRoles for " + RoleBasedAuthorizationStrategy.GLOBAL
+  }
+} else {
+  println "Role Strategy Plugin not found!"
+}
