@@ -23,7 +23,7 @@ def findRoleEntry(grantedRoles, roleName)
   return null
 }
 
-def call(Map roles) {
+def call(Map roles = [:]) {
 
 def authStrategy = Jenkins.instance.getAuthorizationStrategy()
 
