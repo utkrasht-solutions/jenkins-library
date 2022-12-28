@@ -7,14 +7,13 @@ import com.michelin.cio.hudson.plugins.rolestrategy.RoleBasedAuthorizationStrate
 import com.michelin.cio.hudson.plugins.rolestrategy.Role
 import com.synopsys.arc.jenkins.plugins.rolestrategy.RoleType
 
-def access(Map roles) {
-def findGuestRoleEntry(grantedRoles, ${roles.roleName})
+def findRoleEntry(grantedRoles, roleName)
 {
   for (def entry : grantedRoles)
   {
     Role role = entry.getKey()
 
-    if (role.getName().equals(${roles.roleName}))
+    if (role.getName().equals(roleName))
     {
       return entry
     }
@@ -23,6 +22,7 @@ def findGuestRoleEntry(grantedRoles, ${roles.roleName})
   return null
 }
 
+def access(Map roles) {
 def authStrategy = Jenkins.instance.getAuthorizationStrategy()
 
 
@@ -42,7 +42,7 @@ def authStrategy = Jenkins.instance.getAuthorizationStrategy()
     if (grantedRoles != null) {
       // println "Got grantedRoles for " + RoleBasedAuthorizationStrategy.PROJECT
 
-      def roleEntry = findGuestRoleEntry(grantedRoles, ${roles.roleName});
+      def roleEntry = findRoleEntry(grantedRoles, ${roles.roleName});
       if (roleEntry != null) {
         // println "Found role " + ${roles.roleName}
 
@@ -82,7 +82,7 @@ def authStrategy = Jenkins.instance.getAuthorizationStrategy()
     if (grantedRoles != null) {
        println "Got grantedRoles for " + RoleBasedAuthorizationStrategy.GLOBAL
 
-      def roleEntry = findGuestRoleEntry(grantedRoles, ${roles.globalroleName});
+      def roleEntry = findRoleEntry(grantedRoles, ${roles.globalroleName});
       if (roleEntry != null) {
          println "Found role " + ${roles.globalroleName}
 
