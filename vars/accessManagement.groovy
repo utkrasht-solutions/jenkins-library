@@ -7,7 +7,7 @@ import com.michelin.cio.hudson.plugins.rolestrategy.RoleBasedAuthorizationStrate
 import com.michelin.cio.hudson.plugins.rolestrategy.Role
 import com.synopsys.arc.jenkins.plugins.rolestrategy.RoleType
 
-def call(Map roles) {
+
 def findRoleEntry(grantedRoles, roleName)
 {
   for (def entry : grantedRoles)
@@ -23,6 +23,7 @@ def findRoleEntry(grantedRoles, roleName)
   return null
 }
 
+def call(Map roles) {
 
 def authStrategy = Jenkins.instance.getAuthorizationStrategy()
 
