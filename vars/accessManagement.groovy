@@ -62,31 +62,32 @@ if (strategy != null && strategy instanceof com.michelin.cio.hudson.plugins.role
     Method assignRoleMethod = RoleBasedAuthorizationStrategy.class.getDeclaredMethod("assignRole", RoleType.class, Role.class, String.class);
     assignRoleMethod.setAccessible(true);
 
-    def grantedRoles = authStrategy.getGrantedRoles(RoleBasedAuthorizationStrategy.PROJECT);
-    if (grantedRoles != null) {
-      // println "Got grantedRoles for " + RoleBasedAuthorizationStrategy.PROJECT
+    for (roleName in config.roleName) {
+      def grantedRoles = authStrategy.getGrantedRoles(RoleBasedAuthorizationStrategy.PROJECT);
+      if (grantedRoles != null) {
+        // println "Got grantedRoles for " + RoleBasedAuthorizationStrategy.PROJECT
 
-      def roleEntry = findRoleEntry(grantedRoles, config.roleName);
-      if (roleEntry != null) {
-        // println "Found role " + config.roleName
+        def roleEntry = findRoleEntry(grantedRoles, roleName);
+        if (roleEntry != null) {
+          // println "Found role " + roleName
 
-        def sidList = roleEntry.getValue()
-        if (sidList.contains(config.userName)) {
-          println "User " + config.userName + " already assigned to role " + config.roleName
+          def sidList = roleEntry.getValue()
+          if (sidList.contains(config.userName)) {
+            println "User " + config.userName + " already assigned to role " + roleName
+          } else {
+            println "Adding user " + config.userName + " to role " + roleName
+            roleAuthStrategy.assignRole(RoleType.fromString(RoleBasedAuthorizationStrategy.PROJECT), roleEntry.getKey(), config.userName);
+            println "OK"
+          }
+
+          Jenkins.instance.save()
         } else {
-          println "Adding user " + config.userName + " to role " + config.roleName
-          roleAuthStrategy.assignRole(RoleType.fromString(RoleBasedAuthorizationStrategy.PROJECT), roleEntry.getKey(), config.userName);
-          println "OK"
+          println "Unable to find role " + config.roleName
         }
-
-        Jenkins.instance.save()
       } else {
-        println "Unable to find role " + config.roleName
+        println "Unable to find grantedRoles for " + RoleBasedAuthorizationStrategy.PROJECT
       }
-    } else {
-      println "Unable to find grantedRoles for " + RoleBasedAuthorizationStrategy.PROJECT
     }
-
     def grantedGlobalRoles = authStrategy.getGrantedRoles(RoleBasedAuthorizationStrategy.GLOBAL);
     if (grantedGlobalRoles != null) {
 
