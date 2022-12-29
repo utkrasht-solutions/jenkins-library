@@ -83,7 +83,7 @@ if (strategy != null && strategy instanceof com.michelin.cio.hudson.plugins.role
 
           Jenkins.instance.save()
         } else {
-          println "Unable to find role " + config.roleName
+          println "Unable to find role " + roleName
         }
       } else {
         println "Unable to find grantedRoles for " + RoleBasedAuthorizationStrategy.PROJECT
