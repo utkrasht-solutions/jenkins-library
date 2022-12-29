@@ -15,9 +15,9 @@ properties([parameters([
         string(name: "Project_Role_Name", trim: true, description: "Global Role name")
 ])])
 
-def userName = params.User_Name
-def roleName = params.Project_Role_Name
-def globalroleName = params.Global_Role_Name
+//def userName = params.User_Name
+//def roleName = params.Project_Role_Name
+//def globalroleName = params.Global_Role_Name
 
 def findRoleEntry(grantedRoles, roleName) {
   for (def entry : grantedRoles) {
@@ -31,7 +31,11 @@ def findRoleEntry(grantedRoles, roleName) {
   return null
 }
 
-def call(userName, roleName, globalroleName) {
+def call(Map roles) {
+  def roleName = ${roles.roleName}
+  def userName = ${roles.userName}
+  def globalroleName = ${roles.globalroleName}
+
   def authStrategy = Jenkins.instance.getAuthorizationStrategy()
 
   if (authStrategy instanceof RoleBasedAuthorizationStrategy) {
