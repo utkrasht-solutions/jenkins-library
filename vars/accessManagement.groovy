@@ -62,7 +62,8 @@ if (strategy != null && strategy instanceof com.michelin.cio.hudson.plugins.role
     Method assignRoleMethod = RoleBasedAuthorizationStrategy.class.getDeclaredMethod("assignRole", RoleType.class, Role.class, String.class);
     assignRoleMethod.setAccessible(true);
 
-    for (roleName in config.roleName) {
+    str = config.roleName.split(',')
+    for (String roleName :str) {
       def grantedRoles = authStrategy.getGrantedRoles(RoleBasedAuthorizationStrategy.PROJECT);
       if (grantedRoles != null) {
         // println "Got grantedRoles for " + RoleBasedAuthorizationStrategy.PROJECT
