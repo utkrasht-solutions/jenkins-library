@@ -8,12 +8,6 @@ import com.michelin.cio.hudson.plugins.rolestrategy.RoleBasedAuthorizationStrate
 import com.michelin.cio.hudson.plugins.rolestrategy.Role
 import com.synopsys.arc.jenkins.plugins.rolestrategy.RoleType
 
-properties([parameters([
-        string(name: "Access_Request_ID", description: "Jira ticket id only"),
-        string(name: "User_Name", description: "user email address or username"),
-        string(name: "Global_Role_Name", defaultValue: "readonly", trim: true, description: "Global Role name"),
-        string(name: "Project_Role_Name", trim: true, description: "Global Role name")
-])])
 
 //def userName = params.User_Name
 //def roleName = params.Project_Role_Name
@@ -31,10 +25,16 @@ def findRoleEntry(grantedRoles, roleName) {
   return null
 }
 
-def call(Map roles) {
-  def roleName = ${roles.roleName}
-  def userName = ${roles.userName}
-  def globalroleName = ${roles.globalroleName}
+def call(Map config) {
+  properties([parameters([
+          string(name: "Access_Request_ID", description: "Jira ticket id only"),
+          string(name: "User_Name", description: "user email address or username"),
+          string(name: "Global_Role_Name", defaultValue: "readonly", trim: true, description: "Global Role name"),
+          string(name: "Project_Role_Name", trim: true, description: "Global Role name")
+  ])])
+//  roleName = config.roleName
+//  userName = config.userName
+//  globalroleName = config.globalroleName
 
   def authStrategy = Jenkins.instance.getAuthorizationStrategy()
 
@@ -54,22 +54,22 @@ def call(Map roles) {
     if (grantedRoles != null) {
       // println "Got grantedRoles for " + RoleBasedAuthorizationStrategy.PROJECT
 
-      def roleEntry = findRoleEntry(grantedRoles, roleName);
+      def roleEntry = findRoleEntry(grantedRoles, config.roleName);
       if (roleEntry != null) {
-        // println "Found role " + roleName
+        // println "Found role " + config.roleName
 
         def sidList = roleEntry.getValue()
-        if (sidList.contains(userName)) {
-          println "User " + userName + " already assigned to role " + roleName
+        if (sidList.contains(config.userName)) {
+          println "User " + config.userName + " already assigned to role " + config.roleName
         } else {
-          println "Adding user " + userName + " to role " + roleName
-          roleAuthStrategy.assignRole(RoleType.fromString(RoleBasedAuthorizationStrategy.PROJECT), roleEntry.getKey(), userName);
+          println "Adding user " + config.userName + " to role " + config.roleName
+          roleAuthStrategy.assignRole(RoleType.fromString(RoleBasedAuthorizationStrategy.PROJECT), roleEntry.getKey(), config.userName);
           println "OK"
         }
 
         Jenkins.instance.save()
       } else {
-        println "Unable to find role " + roleName
+        println "Unable to find role " + config.roleName
       }
     } else {
       println "Unable to find grantedRoles for " + RoleBasedAuthorizationStrategy.PROJECT
@@ -94,22 +94,22 @@ def call(Map roles) {
     if (grantedRoles != null) {
       println "Got grantedRoles for " + RoleBasedAuthorizationStrategy.GLOBAL
 
-      def roleEntry = findRoleEntry(grantedRoles, globalroleName);
+      def roleEntry = findRoleEntry(grantedRoles, config.globalroleName);
       if (roleEntry != null) {
-        println "Found role " + globalroleName
+        println "Found role " + config.globalroleName
 
         def sidList = roleEntry.getValue()
-        if (sidList.contains(userName)) {
-          println "User " + userName + " already assigned to Global role " + globalroleName
+        if (sidList.contains(config.userName)) {
+          println "User " + config.userName + " already assigned to Global role " + config.globalroleName
         } else {
-          println "Adding user " + userName + " to Global role " + globalroleName
-          roleAuthStrategy.assignRole(RoleType.fromString(RoleBasedAuthorizationStrategy.GLOBAL), roleEntry.getKey(), userName);
+          println "Adding user " + config.userName + " to Global role " + config.globalroleName
+          roleAuthStrategy.assignRole(RoleType.fromString(RoleBasedAuthorizationStrategy.GLOBAL), roleEntry.getKey(), config.userName);
           println "OK"
         }
 
         Jenkins.instance.save()
       } else {
-        println "Unable to find Global role " + globalroleName
+        println "Unable to find Global role " + config.globalroleName
       }
     } else {
       println "Unable to find grantedRoles for " + RoleBasedAuthorizationStrategy.GLOBAL
