@@ -8,11 +8,6 @@ import com.michelin.cio.hudson.plugins.rolestrategy.RoleBasedAuthorizationStrate
 import com.michelin.cio.hudson.plugins.rolestrategy.Role
 import com.synopsys.arc.jenkins.plugins.rolestrategy.RoleType
 
-
-//def userName = params.User_Name
-//def roleName = params.Project_Role_Name
-//def globalroleName = params.Global_Role_Name
-
 def findRoleEntry(grantedRoles, roleName) {
   for (def entry : grantedRoles) {
     Role role = entry.getKey()
@@ -26,15 +21,32 @@ def findRoleEntry(grantedRoles, roleName) {
 }
 
 def call(Map config) {
-  properties([parameters([
-          string(name: "Access_Request_ID", description: "Jira ticket id only"),
-          string(name: "User_Name", description: "user email address or username"),
-          string(name: "Global_Role_Name", defaultValue: "readonly", trim: true, description: "Global Role name"),
-          string(name: "Project_Role_Name", trim: true, description: "Global Role name")
-  ])])
-//  roleName = config.roleName
-//  userName = config.userName
-//  globalroleName = config.globalroleName
+  properties([
+          parameters([
+                  string(description: 'Jira ticket id only', name: 'Access_Request_ID', trim: true),
+                  string(description: 'user email address or username', name: 'User_Name', trim: true),
+                  string(defaultValue: 'ReadOnly', description: 'Global Role name', name: 'Global_Role_Name', trim: true),
+                  [$class: 'ChoiceParameter', choiceType: 'PT_CHECKBOX', filterLength: 1, filterable: false, name: 'Project_Role_Name', randomName: 'choice-parameter-75219681082247', script: [$class: 'GroovyScript', fallbackScript: [classpath: [], oldScript: '', sandbox: false, script: ''], script: [classpath: [], oldScript: '', sandbox: false, script: '''import hudson.model.User
+import hudson.model.Hudson
+import hudson.security.AuthorizationStrategy
+import hudson.security.Permission
+import com.michelin.cio.hudson.plugins.rolestrategy.RoleBasedAuthorizationStrategy
+import com.michelin.cio.hudson.plugins.rolestrategy.RoleMap
+
+AuthorizationStrategy strategy = Hudson.getInstance().getAuthorizationStrategy();
+
+if (strategy != null && strategy instanceof com.michelin.cio.hudson.plugins.rolestrategy.RoleBasedAuthorizationStrategy) {
+    roleStrategy = (RoleBasedAuthorizationStrategy) strategy;
+    // not very straightforward to get the groups for a given user
+    roles = roleStrategy.getGrantedRoles("projectRoles")
+  	def result = []
+    for (entry in roles) {
+          role = entry.key
+          result.add(role.getName())
+      }
+ 	return result   
+}
+''']]]])])
 
   def authStrategy = Jenkins.instance.getAuthorizationStrategy()
 
@@ -74,27 +86,11 @@ def call(Map config) {
     } else {
       println "Unable to find grantedRoles for " + RoleBasedAuthorizationStrategy.PROJECT
     }
-  } else {
-    println "Role Strategy Plugin not found!"
-  }
 
-  if (authStrategy instanceof RoleBasedAuthorizationStrategy) {
-    RoleBasedAuthorizationStrategy roleAuthStrategy = (RoleBasedAuthorizationStrategy) authStrategy
+    def grantedGlobalRoles = authStrategy.getGrantedRoles(RoleBasedAuthorizationStrategy.GLOBAL);
+    if (grantedGlobalRoles != null) {
 
-    // Make constructors available
-    Constructor[] constrs = Role.class.getConstructors();
-    for (Constructor<?> c : constrs) {
-      c.setAccessible(true);
-    }
-    // Make the method assignRole accessible for Project role
-    Method assignRoleMethod = RoleBasedAuthorizationStrategy.class.getDeclaredMethod("assignRole", RoleType.class, Role.class, String.class);
-    assignRoleMethod.setAccessible(true);
-
-    def grantedRoles = authStrategy.getGrantedRoles(RoleBasedAuthorizationStrategy.GLOBAL);
-    if (grantedRoles != null) {
-      println "Got grantedRoles for " + RoleBasedAuthorizationStrategy.GLOBAL
-
-      def roleEntry = findRoleEntry(grantedRoles, config.globalroleName);
+      def roleEntry = findRoleEntry(grantedGlobalRoles, config.globalroleName);
       if (roleEntry != null) {
         println "Found role " + config.globalroleName
 
