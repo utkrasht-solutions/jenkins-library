@@ -1,4 +1,4 @@
-on: 
+on:
   pull_request_review_comment:
     types: [ created, deleted ]
 
@@ -6,8 +6,6 @@ jobs:
   checkout:
     runs-on: ubuntu-latest
     name: Checkout Code
-    env:
-      FOO: ${{ github.event.inputs.foo }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -22,6 +20,7 @@ jobs:
           # end of optional handling for multi line json
           echo "::set-output name=packageJson::$content"
       - run: |
+          source $GITHUB_ENV
           VAR="steps.set_var.outputs.packageJson"
           VAR1="$VAR"
           echo "fromJSON($VAR1."${{ github.event.pull_request.actor }}")"
