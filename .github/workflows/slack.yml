@@ -26,7 +26,7 @@ jobs:
           echo "command=${command}" >> $GITHUB_ENV
           echo ${command}
           echo ${{ env.command }}
-          echo ${{ fromJSON(env.command) }}
+          echo ${{ fromJSON(format('{0}', env.command)) }}
 
 #  set_value:
 #    runs-on: ubuntu-latest
