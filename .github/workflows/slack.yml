@@ -23,8 +23,8 @@ jobs:
   set_value:
     runs-on: ubuntu-latest
     name: Get User Name
-    outputs:
-      matrix: ${{ steps.json_properties.outputs.* }}
+#    outputs:
+#      matrix: ${{ steps.json_properties.outputs.* }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -34,6 +34,8 @@ jobs:
         uses: zoexx/github-action-json-file-properties@release
         with:
           file_path: ".github/slack-id.json"
+      - run: |
+          echo ${{ steps.json_properties.outputs.* }}
   slack:
     runs-on: ubuntu-latest
     name: Send Slack Notification
