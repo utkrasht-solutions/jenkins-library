@@ -21,7 +21,7 @@ jobs:
 #          # end of optional handling for multi line json
 #          echo "::set-output name=packageJson::$content"
       - run: |
-          echo "${{fromJson(steps.read_json.outputs.*)}}"
+          echo "${{fromJson(steps.read_json.outputs)}}"
 #  set_value:
 #    runs-on: ubuntu-latest
 #    name: Get User Name
