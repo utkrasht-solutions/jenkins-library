@@ -1,19 +1,18 @@
 on: push
-#  pull_request_review_comment:
-#    types: [ created, deleted ]
-
+name: Slack Notification Demo
 jobs:
-  new_push_job:
+  slackNotification:
+    name: Slack Notification
     runs-on: ubuntu-latest
-    name: New push to repo
     steps:
-      - name: Send GitHub trigger payload to Slack Workflow Builder
-        id: slack
-        uses: slackapi/slack-github-action@v1.23.0
-        with:
-          payload: |
-            {"text": "This is a line of text in a channel.\nAnd this is another line of text."}
+      - uses: actions/checkout@v2
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
         env:
-#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_URL: 'https://hooks.slack.com/services/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'
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+          SLACK_CHANNEL: general
+          SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
+          SLACK_ICON: https://github.com/rtCamp.png?size=48
+          SLACK_MESSAGE: 'Post Content :rocket:'
+          SLACK_TITLE: Post Title
+          SLACK_USERNAME: rtCamp
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
