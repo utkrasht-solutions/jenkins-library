@@ -13,6 +13,7 @@ jobs:
           path: './'
       - id: set_var
         run: |
+          
           content=`cat .github/slack-id.json`
           # the following lines are only required for multi line json
           content="${content//'%'/'%25'}"
@@ -21,7 +22,10 @@ jobs:
           # end of optional handling for multi line json
           echo "::set-output name=packageJson::$content"
       - run: |
-          echo "${{ fromJSON(steps.set_var.outputs.packageJson.{github.event.pull_request.actor} }}"
+          USER_NAME="${{ github.event.pull_request.actor}}"
+          VAR="steps.set_var.outputs.packageJson"
+          VAR1=$VAR.${USER_NAME}"
+          echo "fromJSON($VAR1)"
 
 #  set_value:
 #    runs-on: ubuntu-latest
