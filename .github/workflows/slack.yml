@@ -1,8 +1,8 @@
 on:
   pull_request_review_comment:
     types: [ created, deleted ]
-  pull_request_review:
-    types: [ edited, dismissed, submitted ]
+#  pull_request_review:
+#    types: [ edited, dismissed, submitted ]
 
 name: Slack Notification Demo
 jobs:
@@ -19,4 +19,4 @@ jobs:
           SLACK_MESSAGE: 'Post Content :rocket:'
           SLACK_TITLE: Post Title
 #          SLACK_USERNAME: rtCamp
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL_2 }}
