@@ -36,7 +36,7 @@ jobs:
         with:
           file_path: ".github/slack-id.json"
       - run: |
-          echo "${{ steps.json_properties.outputs.keys}}"
+          echo "${{ steps.json_properties.outputs[0]}}"
   slack:
     runs-on: ubuntu-latest
     name: Send Slack Notification
