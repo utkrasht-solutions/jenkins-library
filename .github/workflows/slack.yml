@@ -7,6 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Checkout Code
     steps:
+      - env:
+          FOO: "${{ github.event.inputs.foo }}"
       - uses: actions/checkout@v2
         with:
           path: './'
@@ -19,9 +21,8 @@ jobs:
           content="${content//$'\r'/'%0D'}"
           # end of optional handling for multi line json
           echo "::set-output name=packageJson::$content"
-      - env:
-          FOO: "${{ github.event.inputs.foo }}"
-        run: |
+
+      - run: |
 #          FOO="${{ github.event.inputs.foo }}"
           VAR="steps.set_var.outputs.packageJson"
           VAR1="$VAR.${FOO}"
