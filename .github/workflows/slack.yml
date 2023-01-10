@@ -6,9 +6,9 @@ jobs:
   checkout:
     runs-on: ubuntu-latest
     name: Checkout Code
+    env:
+      FOO: "${{ github.event.inputs.foo }}"
     steps:
-      - env:
-          FOO: "${{ github.event.inputs.foo }}"
       - uses: actions/checkout@v2
         with:
           path: './'
