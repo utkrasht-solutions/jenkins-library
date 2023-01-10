@@ -25,6 +25,7 @@ jobs:
           command="steps.set_var.outputs.packageJson."${{ github.event.pull_request.user.login }}
           echo "command=${command}" >> $GITHUB_ENV
           echo ${command}
+          echo ${{ env.command }}
           echo ${{ fromJSON(env.command) }}
 
 #  set_value:
