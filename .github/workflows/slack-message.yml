@@ -1,4 +1,4 @@
-#on:
+on: push
 #  pull_request:
 #    # 'types' only supports 'review_requested'
 #    types: [review_requested]

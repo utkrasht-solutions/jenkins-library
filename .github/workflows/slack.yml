@@ -36,22 +36,22 @@ jobs:
         with:
           file_path: ".github/slack-id.json"
       - run: |
-          echo "${{ steps.json_properties.outputs[0]}}"
-  slack:
-    runs-on: ubuntu-latest
-    name: Send Slack Notification
-    steps:
-      - name: Send GitHub trigger payload to Slack Workflow Builder
-        id: slack
-        uses: slackapi/slack-github-action@v1.23.0
-        with:
-          payload: |
-            {
-            "text": "PR Raised by: ${{ github.event.pull_request.actor }}\n Comment : ${{ github.event.comment.body }} \n Comment AddedBy: ${{ github.event.comment.user.login }} \n Comment URL: ${{ github.event.comment.html_url }}"
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_2 }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+          echo "${{ format('{0}.{1}', steps.json_properties.outputs, github.event.pull_request.actor) }}"
+#  slack:
+#    runs-on: ubuntu-latest
+#    name: Send Slack Notification
+#    steps:
+#      - name: Send GitHub trigger payload to Slack Workflow Builder
+#        id: slack
+#        uses: slackapi/slack-github-action@v1.23.0
+#        with:
+#          payload: |
+#            {
+#            "text": "PR Raised by: ${{ github.event.pull_request.actor }}\n Comment : ${{ github.event.comment.body }} \n Comment AddedBy: ${{ github.event.comment.user.login }} \n Comment URL: ${{ github.event.comment.html_url }}"
+#            }
+#        env:
+#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_2 }}
+#          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
 #
 #jobs:
