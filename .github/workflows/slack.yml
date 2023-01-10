@@ -7,21 +7,12 @@ on:
 
 jobs:
   testJob:
-    name: Test
-    runs-on: ubuntu-latest
-    steps:
-      - id: set_id
-        uses: actions/checkout@v2
-        run: |
-          content=`cat .github/slack-id.json`
-          # the following lines are only required for multi line json
-          content="${content//'%'/'%25'}"
-          content="${content//$'\n'/'%0A'}"
-          content="${content//$'\r'/'%0D'}"
-          # end of optional handling for multi line json
-          echo "::set-output name=packageJson::$content"
-      - run: |
-          echo "${{fromJson(steps.set_id.outputs.packageJson)}}.${{ github.event.pull_request.user.login }}"
+    name: get properties
+    id: json_properties
+    uses: zoexx/github-action-json-file-properties@release
+    with:
+      file_path: "../slack-id.json"
+
   new_push_job:
     runs-on: ubuntu-latest
     name: New push to repo
@@ -32,11 +23,12 @@ jobs:
         with:
           payload: |
             {
-            "text": "PR Raised by: ${{ github.event.pull_request.user.login }}\n Comment : ${{ github.event.comment.body }} \n Comment AddedBy: ${{ github.event.comment.user.login }} \n Comment URL: ${{ github.event.comment.html_url }}"
+            "text": "PR Raised by: ${{ step.json_properties.outputs.$USER }}\n Comment : ${{ github.event.comment.body }} \n Comment AddedBy: ${{ github.event.comment.user.login }} \n Comment URL: ${{ github.event.comment.html_url }}"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_2 }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+          USER: ${{ github.event.pull_request.actor }}
 
 #
 #jobs:
