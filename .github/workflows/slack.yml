@@ -24,7 +24,7 @@ jobs:
       - run: |
           VAR="steps.set_var.outputs.packageJson"
           VAR1="$VAR"
-          echo "fromJSON($VAR1."${{ secrets.SLACK_WEBHOOK_URL_2 }}")"
+          echo "fromJSON($VAR1."${{ github.event.pull_request.actor }}")"
 
 #  set_value:
 #    runs-on: ubuntu-latest
