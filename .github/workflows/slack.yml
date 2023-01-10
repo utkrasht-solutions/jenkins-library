@@ -1,14 +1,13 @@
 on:
   pull_request_review_comment:
     types: [ created, deleted ]
-#concurrency:
-#  group: ${{ github.head_ref || github.run_id }}
-#  cancel-in-progress: true
 
 jobs:
-  new_push_job:
+  set_value:
     runs-on: ubuntu-latest
-    name: New push to repo
+    name: Get User Name
+    outputs:
+      matrix: ${{ steps.json_properties.outputs.* }}
     steps:
       - name: get properties
         id: json_properties
@@ -17,13 +16,17 @@ jobs:
          - zoexx/github-action-json-file-properties@release
         with:
           file_path: "../slack-id.json"
+  slack:
+    runs-on: ubuntu-latest
+    name: Send Slack Notification
+    steps:
       - name: Send GitHub trigger payload to Slack Workflow Builder
         id: slack
         uses: slackapi/slack-github-action@v1.23.0
         with:
           payload: |
             {
-            "text": "PR Raised by: ${{ steps.json_properties.outputs[github.event.pull_request.actor] }}\n Comment : ${{ github.event.comment.body }} \n Comment AddedBy: ${{ github.event.comment.user.login }} \n Comment URL: ${{ github.event.comment.html_url }}"
+            "text": "PR Raised by: ${{ github.event.pull_request.actor }}\n Comment : ${{ github.event.comment.body }} \n Comment AddedBy: ${{ github.event.comment.user.login }} \n Comment URL: ${{ github.event.comment.html_url }}"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_2 }}
