@@ -17,13 +17,10 @@ jobs:
           payload: |
             {
             "text": "CreatedBy:${{ github.pull_request.actor }}\n Comment : ${{ github.event.comment.body }} \n AddedBy: ${{ github.event.comment.user.login }} \n PR: ${{ github.event.comment.html_url }}",
-#            "channel": "#{{  }}"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_2 }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-
-
 
 #
 #jobs:
