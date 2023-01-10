@@ -1,0 +1,24 @@
+{
+  "Jenkins": [
+    {
+      "name": "master",
+      "os": "linux",
+      "Workspace": "/app/Jenkins/workspace/",
+      "PathSeparator": "/",
+      "maven_home": "/app/Apache-maven-3.3.9/",
+      "Openshift_oc_home": "/app/openshift-origin-client-tools-v3.11.0/",
+      "Identity_file": "/home/Jenkins/.ssh/Jenkins-yyzapp2020.key"
+    },
+    {
+      "name": "BSDLinux",
+      "os": "linux",
+      "Workspace": "/app/Jenkins/workspace/",
+      "PathSeparator": "/",
+      "maven_home": "/app/Apache-maven-3.3.9/",
+      "ant_home": "/app/Apache-ant-1.10.5/",
+      "Openshift_oc_home": "/app/openshift-origin-client-tools-v3.11.0/",
+      "nodejs_home": "/app/jenkins_slave/tool/v12.16.2/",
+      "Identity_file": "/home/Jenkins/.ssh/Jenkins-yyzapp2060.key"
+    }
+  ]
+}
