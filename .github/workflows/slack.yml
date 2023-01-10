@@ -6,6 +6,22 @@ on:
 #  cancel-in-progress: true
 
 jobs:
+  testJob:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - id: set_id
+        run: |
+          content=`cat ../slack-id.json`
+          # the following lines are only required for multi line json
+          content="${content//'%'/'%25'}"
+          content="${content//$'\n'/'%0A'}"
+          content="${content//$'\r'/'%0D'}"
+          # end of optional handling for multi line json
+          echo "::set-output name=packageJson::$content"
+      - run: |
+          echo "${{fromJson(steps.set_id.outputs.packageJson).${{ github.event.pull_request.user.login }}}}"
+          
   new_push_job:
     runs-on: ubuntu-latest
     name: New push to repo
