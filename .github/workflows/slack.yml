@@ -1,7 +1,6 @@
-on: push
-#
-#  pull_request_review_comment:
-#    types: [ created, deleted ]
+on: 
+  pull_request_review_comment:
+    types: [ created, deleted ]
 
 jobs:
   checkout:
@@ -24,7 +23,7 @@ jobs:
       - run: |
           USER_NAME="${{ github.event.pull_request.actor}}"
           VAR="steps.set_var.outputs.packageJson"
-          VAR1=$VAR.${USER_NAME}"
+          VAR1="$VAR.${USER_NAME}"
           echo "fromJSON($VAR1)"
 
 #  set_value:
