@@ -21,7 +21,7 @@ jobs:
           # end of optional handling for multi line json
           echo "::set-output name=packageJson::$content"
       - run: |
-          echo "${{fromJson(steps.set_var.outputs.packageJson).github.event.pull_request.actor}}"
+          echo "${{fromJson(format('{0}.{1}', steps.set_var.outputs.packageJson, github.event.pull_request.actor))}}"
 
 #  set_value:
 #    runs-on: ubuntu-latest
