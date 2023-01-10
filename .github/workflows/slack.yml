@@ -3,6 +3,13 @@ on:
     types: [ created, deleted ]
 
 jobs:
+  checkout:
+    runs-on: ubuntu-latest
+    name: Checkout Code
+    steps:
+      - name: checkout
+        id: checkout
+        uses: actions/checkout@v2
   set_value:
     runs-on: ubuntu-latest
     name: Get User Name
