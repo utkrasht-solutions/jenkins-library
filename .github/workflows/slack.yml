@@ -12,7 +12,9 @@ jobs:
     steps:
       - name: get properties
         id: json_properties
-        uses: zoexx/github-action-json-file-properties@release
+        uses:
+         - actions/checkout@v2
+         - zoexx/github-action-json-file-properties@release
         with:
           file_path: "../slack-id.json"
       - name: Send GitHub trigger payload to Slack Workflow Builder
