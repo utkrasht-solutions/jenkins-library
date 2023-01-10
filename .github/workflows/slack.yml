@@ -21,12 +21,16 @@ jobs:
           # end of optional handling for multi line json
           echo "::set-output name=packageJson::$content"
           echo ${{ github.event.pull_request.user.login }}
-      - run: |
+      - id: set_command
+        outputs:
+          command: ${{ }}
+        run: |
           command="steps.set_var.outputs.packageJson."${{ github.event.pull_request.user.login }}
           echo "command=${command}" >> $GITHUB_ENV
           echo ${command}
           echo ${{ env.command }}
           echo ${{ fromJSON(format('{0}', env.command)) }}
+          echo "::set-output name=user::$command"
 
 #  set_value:
 #    runs-on: ubuntu-latest
