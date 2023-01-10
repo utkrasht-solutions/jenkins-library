@@ -3,35 +3,35 @@ on:
     types: [ created, deleted ]
 
 jobs:
-  checkout:
-    runs-on: ubuntu-latest
-    name: Checkout Code
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          path: './'
-      - id: set_var
-        run: |
-          content=`cat .github/slack-id.json`
-          # the following lines are only required for multi line json
-          content="${content//'%'/'%25'}"
-          content="${content//$'\n'/'%0A'}"
-          content="${content//$'\r'/'%0D'}"
-          username=${{ github.event.pull_request.actor }}
-          # end of optional handling for multi line json
-          echo "::set-output name=packageJson::$content"
-          echo ${{ github.event.pull_request.user.login }}
-      - id: set_command
-        outputs:
-          command: ${{ }}
-        run: |
-          command="steps.set_var.outputs.packageJson."${{ github.event.pull_request.user.login }}
-          echo "command=${command}" >> $GITHUB_ENV
-          echo ${command}
-          echo ${{ env.command }}
-          echo ${{ fromJSON(format('{0}', env.command)) }}
-          echo "::set-output name=user::$command"
-
+#  checkout:
+#    runs-on: ubuntu-latest
+#    name: Checkout Code
+#    steps:
+#      - uses: actions/checkout@v2
+#        with:
+#          path: './'
+#      - id: set_var
+#        run: |
+#          content=`cat .github/slack-id.json`
+#          # the following lines are only required for multi line json
+#          content="${content//'%'/'%25'}"
+#          content="${content//$'\n'/'%0A'}"
+#          content="${content//$'\r'/'%0D'}"
+#          username=${{ github.event.pull_request.actor }}
+#          # end of optional handling for multi line json
+#          echo "::set-output name=packageJson::$content"
+#          echo ${{ github.event.pull_request.user.login }}
+#      - id: set_command
+#        outputs:
+#          command: ${{ }}
+#        run: |
+#          command="steps.set_var.outputs.packageJson."${{ github.event.pull_request.user.login }}
+#          echo "command=${command}" >> $GITHUB_ENV
+#          echo ${command}
+#          echo ${{ env.command }}
+#          echo ${{ fromJSON(format('{0}', env.command)) }}
+#          echo "::set-output name=user::$command"
+#
 #  set_value:
 #    runs-on: ubuntu-latest
 #    name: Get User Name
@@ -59,23 +59,9 @@ jobs:
         with:
           payload: |
             {
-            "text": "PR Raised by: ${{ github.event.pull_request.user.login }}\n Comment : ${{ github.event.comment.body }} \n Comment AddedBy: ${{ github.event.comment.user.login }} \n Comment URL: ${{ github.event.comment.html_url }}"
+            "text": "PR Raised by: ${{ github.event.pull_request.user.login }}\n Comment : ${{ github.event.comment.body }} \n Comment AddedBy: ${{ github.event.comment.user.login }} \n Comment URL: ${{ github.event.comment.html_url }}",
+            "channel": "#D03437L511A"
             }
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_2 }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-      - name: print env
-        run: |
-          echo ${{ github.event.pull_request.actor }}
-
-#
-#jobs:
-#  pr-message-to-slack:
-#    runs-on: ubuntu-latest
-#    steps:
-#      # To use slack-id.json
-#      - uses: actions/checkout@v2
-#      - uses: hirokisakabe/pr-message-to-slack@v1.0.0
-#        env:
-#          # https://hooks.slack.com/...
-#          PR_MESSAGE_SLACK_WEBHOOK_URL: ${{ secrets.PR_MESSAGE_SLACK_WEBHOOK_URL }}
