@@ -9,9 +9,9 @@ jobs:
   testJob:
     name: Test
     runs-on: ubuntu-latest
-    uses: actions/checkout@v2
     steps:
       - id: set_id
+        uses: actions/checkout@v2
         run: |
           content=`cat .github/slack-id.json`
           # the following lines are only required for multi line json
