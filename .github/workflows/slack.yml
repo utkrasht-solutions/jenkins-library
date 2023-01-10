@@ -1,6 +1,6 @@
-on:
-  pull_request_review_comment:
-    types: [ created, deleted ]
+on: push
+#  pull_request_review_comment:
+#    types: [ created, deleted ]
 
 jobs:
   new_push_job:
@@ -12,17 +12,8 @@ jobs:
         uses: slackapi/slack-github-action@v1.23.0
         with:
           payload: |
-            {
-              "text": "Danny Torrence left a 1 star review for your property.",
-              "blocks": [{
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "Danny Torrence left the following review for your property:"
-                }
-              }]
-            }
+            {"text": "This is a line of text in a channel.\nAnd this is another line of text."}
         env:
 #          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_URL: 'https://hooks.slack.com/services/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'
+          SLACK_WEBHOOK_URL: 'https://hooks.slack.com/services/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'
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
