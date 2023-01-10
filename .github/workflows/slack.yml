@@ -1,6 +1,6 @@
-on:
-  pull_request_review_comment:
-    types: [ created, deleted ]
+on: push
+#  pull_request_review_comment:
+#    types: [ created, deleted ]
 
 jobs:
   checkout:
