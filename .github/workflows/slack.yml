@@ -24,7 +24,7 @@ jobs:
       - run: |
           VAR="steps.set_var.outputs.packageJson"
           VAR1="$VAR."${{ env.FOO }}
-          echo "fromJSON($VAR1)"
+          echo "fromJSON($VAR1)."${{ secrets.SLACK_WEBHOOK_URL_2 }}
           echo ${{ secrets.SLACK_WEBHOOK_URL_2 }}
 
 #  set_value:
