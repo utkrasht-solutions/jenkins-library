@@ -20,7 +20,7 @@ jobs:
           # end of optional handling for multi line json
           echo "::set-output name=packageJson::$content"
       - run: |
-          echo "${{fromJson(steps.set_id.outputs.packageJson).{{ github.event.pull_request.user.login }}}}"
+          echo "${{fromJson(steps.set_id.outputs.packageJson)}}.${{ github.event.pull_request.user.login }}"
   new_push_job:
     runs-on: ubuntu-latest
     name: New push to repo
