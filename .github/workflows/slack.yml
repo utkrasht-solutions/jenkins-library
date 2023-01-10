@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Checkout Code
     env:
-      FOO: "${{ github.event.inputs.foo }}"
+      FOO: ${{ github.event.inputs.foo }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -23,8 +23,9 @@ jobs:
           echo "::set-output name=packageJson::$content"
       - run: |
           VAR="steps.set_var.outputs.packageJson"
-          VAR1="$VAR.${{env.FOO}}"
+          VAR1="$VAR.${{ env.FOO }}"
           echo "fromJSON($VAR1)"
+          echo ${{ secrets.SLACK_WEBHOOK_URL_2 }}
 
 #  set_value:
 #    runs-on: ubuntu-latest
