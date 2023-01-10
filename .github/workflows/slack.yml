@@ -22,12 +22,12 @@ jobs:
           echo "::set-output name=packageJson::$content"
           echo ${{ github.event.pull_request.user.login }}
       - run: |
-          VAR="steps.set_var.outputs.packageJson"
-          VAR1="$VAR"
-          command="$VAR1."${{ github.event.pull_request.user.login }}
+          command="steps.set_var.outputs.packageJson."${{ github.event.pull_request.user.login }}
+#          VAR1="$VAR"
+#          command="$VAR1."${{ github.event.pull_request.user.login }}
           echo "command=${command}" >> $GITHUB_ENV
-          echo ${{ fromJSON(env.command) }}
-#          echo "::set-output name=command::command"
+          echo ${command}
+#          echo ${{ fromJSON(env.command) }}
 
 #  set_value:
 #    runs-on: ubuntu-latest
