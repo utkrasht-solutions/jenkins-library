@@ -7,20 +7,30 @@ jobs:
     runs-on: ubuntu-latest
     name: Checkout Code
     steps:
-      - name: checkout
-        id: checkout
-        uses: actions/checkout@v2
-  set_value:
-    runs-on: ubuntu-latest
-    name: Get User Name
-    outputs:
-      matrix: ${{ steps.json_properties.outputs.* }}
-    steps:
-      - name: get properties
-        id: json_properties
-        uses: zoexx/github-action-json-file-properties@release
+      - uses: actions/checkout@v2
         with:
-          file_path: "../slack-id.json"
+          path: './'
+      - run: |
+          content=`cat ../slack-id.json`
+          # the following lines are only required for multi line json
+          content="${content//'%'/'%25'}"
+          content="${content//$'\n'/'%0A'}"
+          content="${content//$'\r'/'%0D'}"
+          # end of optional handling for multi line json
+          echo "::set-output name=packageJson::$content"
+      - run: |
+          echo "${{fromJson(steps.set_var.outputs.packageJson).*}}"
+#  set_value:
+#    runs-on: ubuntu-latest
+#    name: Get User Name
+#    outputs:
+#      matrix: ${{ steps.json_properties.outputs.* }}
+#    steps:
+#      - name: get properties
+#        id: json_properties
+#        uses: zoexx/github-action-json-file-properties@release
+#        with:
+#          file_path: "../slack-id.json"
   slack:
     runs-on: ubuntu-latest
     name: Send Slack Notification
