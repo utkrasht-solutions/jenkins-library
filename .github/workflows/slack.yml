@@ -23,9 +23,8 @@ jobs:
           echo "::set-output name=packageJson::$content"
       - run: |
           VAR="steps.set_var.outputs.packageJson"
-          VAR1="$VAR."${{ env.FOO }}
-          echo "fromJSON($VAR1)."${{ secrets.SLACK_WEBHOOK_URL_2 }}
-          echo ${{ secrets.SLACK_WEBHOOK_URL_2 }}
+          VAR1="$VAR"
+          echo "fromJSON($VAR1."${{ secrets.SLACK_WEBHOOK_URL_2 }}")"
 
 #  set_value:
 #    runs-on: ubuntu-latest
