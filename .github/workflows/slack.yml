@@ -23,7 +23,7 @@ jobs:
         with:
           payload: |
             {
-            "text": "PR Raised by: ${{ steps.json_properties.outputs.USER }}\n Comment : ${{ github.event.comment.body }} \n Comment AddedBy: ${{ github.event.comment.user.login }} \n Comment URL: ${{ github.event.comment.html_url }}"
+            "text": "PR Raised by: ${{ steps.json_properties.outputs.[env.USER] }}\n Comment : ${{ github.event.comment.body }} \n Comment AddedBy: ${{ github.event.comment.user.login }} \n Comment URL: ${{ github.event.comment.html_url }}"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_2 }}
