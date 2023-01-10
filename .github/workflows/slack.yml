@@ -25,8 +25,8 @@ jobs:
           VAR="steps.set_var.outputs.packageJson"
           VAR1="$VAR"
           command="fromJSON($VAR1."${{ github.event.pull_request.user.login }}")"
-          echo ${command}
-          echo ${{ format('{0}', ${command} }}
+          echo ${command} >> $GITHUB_ENV
+          echo ${{ format('{0}', env.command }}
 
 #  set_value:
 #    runs-on: ubuntu-latest
