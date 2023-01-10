@@ -16,7 +16,7 @@ jobs:
         with:
           payload: |
             {
-            "text": "CreatedBy:${{ github.event.pull_request.user.login }}\n Comment : ${{ github.event.comment.body }} \n AddedBy: ${{ github.event.comment.user.login }} \n PR: ${{ github.event.comment.html_url }}"
+            "text": "PR Raised by: ${{ github.event.pull_request.user.login }}\n Comment : ${{ github.event.comment.body }} \n Comment AddedBy: ${{ github.event.comment.user.login }} \n Comment URL: ${{ github.event.comment.html_url }}"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_2 }}
