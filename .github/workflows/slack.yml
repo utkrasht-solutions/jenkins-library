@@ -11,7 +11,7 @@ jobs:
         with:
           path: './'
       - run: |
-          content=`cat ../slack-id.json`
+          content=`cat .github/slack-id.json`
           # the following lines are only required for multi line json
           content="${content//'%'/'%25'}"
           content="${content//$'\n'/'%0A'}"
