@@ -1,6 +1,7 @@
-on:
-  pull_request_review_comment:
-    types: [ created, deleted ]
+on: push
+#
+#  pull_request_review_comment:
+#    types: [ created, deleted ]
 
 jobs:
 #  checkout:
@@ -35,7 +36,8 @@ jobs:
         with:
           file_path: ".github/slack-id.json"
       - run: |
-          echo '${{ steps.json_properties.outputs}}'.concat('.', {{github.event.pull_request.actor}})
+#          echo '${{ steps.json_properties.outputs[]}}'.concat('.', {{github.event.pull_request.actor}})
+          echo ${{ steps.json_properties.outputs.keys}}
   slack:
     runs-on: ubuntu-latest
     name: Send Slack Notification
