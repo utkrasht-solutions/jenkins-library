@@ -11,9 +11,7 @@ jobs:
     steps:
       - name: get properties
         id: json_properties
-        uses:
-         - actions/checkout@v2
-         - zoexx/github-action-json-file-properties@release
+        uses: zoexx/github-action-json-file-properties@release
         with:
           file_path: "../slack-id.json"
   slack:
