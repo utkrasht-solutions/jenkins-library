@@ -6,17 +6,15 @@ on:
 #  cancel-in-progress: true
 
 jobs:
-  testJob:
-    name: get properties
-    id: json_properties
-    uses: zoexx/github-action-json-file-properties@release
-    with:
-      file_path: "../slack-id.json"
-
   new_push_job:
     runs-on: ubuntu-latest
     name: New push to repo
     steps:
+      - name: get properties
+        id: json_properties
+        uses: zoexx/github-action-json-file-properties@release
+        with:
+          file_path: "../slack-id.json"
       - name: Send GitHub trigger payload to Slack Workflow Builder
         id: slack
         uses: slackapi/slack-github-action@v1.23.0
