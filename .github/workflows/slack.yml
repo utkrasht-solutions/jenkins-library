@@ -1,6 +1,9 @@
 on:
   pull_request_review_comment:
     types: [ created, deleted ]
+concurrency:
+  group: ${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
 
 jobs:
   new_push_job:
@@ -13,9 +16,23 @@ jobs:
         with:
           payload: |
             {
-            "text": "Comment : ${{ github.event.comment.body }} \n AddedBy: ${{ github.event.comment.user.login }} \n PR: ${{ github.event.comment.html_url }}",
-            "channel": "dpnkvrm"
+            "text": "CreatedBy:${{ github.pull_request.actor }}\n Comment : ${{ github.event.comment.body }} \n AddedBy: ${{ github.event.comment.user.login }} \n PR: ${{ github.event.comment.html_url }}",
+#            "channel": "#{{  }}"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_2 }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
+
+
+#
+#jobs:
+#  pr-message-to-slack:
+#    runs-on: ubuntu-latest
+#    steps:
+#      # To use slack-id.json
+#      - uses: actions/checkout@v2
+#      - uses: hirokisakabe/pr-message-to-slack@v1.0.0
+#        env:
+#          # https://hooks.slack.com/...
+#          PR_MESSAGE_SLACK_WEBHOOK_URL: ${{ secrets.PR_MESSAGE_SLACK_WEBHOOK_URL }}
