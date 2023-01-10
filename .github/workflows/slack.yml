@@ -21,6 +21,7 @@ jobs:
           echo "::set-output name=packageJson::$content"
       - run: |
           source $GITHUB_ENV
+          env
           VAR="steps.set_var.outputs.packageJson"
           VAR1="$VAR"
           echo "fromJSON($VAR1."${{ github.event.pull_request.actor }}")"
