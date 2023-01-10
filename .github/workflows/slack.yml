@@ -26,6 +26,7 @@ jobs:
           VAR1="$VAR"
           command="fromJSON($VAR1."${{ github.event.pull_request.user.login }}")"
           echo ${command}
+          echo ${{ command }}
 
 #  set_value:
 #    runs-on: ubuntu-latest
