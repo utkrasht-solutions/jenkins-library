@@ -1,8 +1,8 @@
-on: push
-#  pull_request_review_comment:
-#    types:
-#      - created
-#      - deleted
+on: 
+  pull_request_review_comment:
+    types:
+      - created
+      - deleted
 jobs:
   checkout:
     runs-on: ubuntu-latest
@@ -17,8 +17,8 @@ jobs:
         run: |
           content=`cat .github/slack-id.json`
           echo $content
-          echo ${{ github.event.push.user.login }}
-          echo $content | jq .${{ github.event.push.user.login }}
+          echo ${{ github.event.pull_request.user.login }}
+          echo $content | jq .${{ github.event.pull_request.user.login }}
           echo "::set-output name=user::$content"
 #          echo "${{ github.event.push.user.login }}"
 #      - id: set_command
