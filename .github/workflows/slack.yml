@@ -30,7 +30,7 @@ jobs:
          payload: |
            {
            "text": "PR Raised by: ${{ github.event.pull_request.user.login }}\n Comment : ${{ github.event.comment.body }} \n Comment AddedBy: ${{ github.event.comment.user.login }} \n Comment URL: ${{ github.event.comment.html_url }}",
-           "channel": "${{ needs.checkout.outputs.user}}"
+           "channel": "${{ needs.checkout.outputs.user }}"
            }
        env:
          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
