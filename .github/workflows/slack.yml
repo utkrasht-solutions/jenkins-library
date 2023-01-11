@@ -31,7 +31,6 @@ jobs:
           echo "${{ env.command }}"
           echo "${{ env.CI_COMMIT_AUTHOR }}"
           echo "${{ env.command }}"
-          #          echo "${{ fromJSON( env.command) }}"
           echo "::set-output name=user::$command"
 #  set_value:
 #    runs-on: ubuntu-latest
