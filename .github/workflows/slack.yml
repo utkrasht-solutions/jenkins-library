@@ -27,17 +27,11 @@ jobs:
         outputs:
           command: ${{ }}
         run: >
-          command="steps.set_var.outputs.packageJson."${{
-          github.event.pull_request.user.login }}
-
+          command="steps.set_var.outputs.packageJson."${{ github.event.pull_request.user.login }}
           echo "command=${command}" >> $GITHUB_ENV
-
           echo ${command}
-
           echo ${{ env.command }}
-
           echo ${{ fromJSON(format('{0}', env.command)) }}
-
           echo "::set-output name=user::$command"
   set_value:
     runs-on: ubuntu-latest
@@ -53,7 +47,6 @@ jobs:
           file_path: .github/slack-id.json
       - run: >
           echo "${{ steps.json_properties.outputs.*.dpnkvrm }}"
-
           echo "${{ format('{0}.{1}', steps.json_properties, github.event.pull_request.actor) }}"
 
   # slack:
