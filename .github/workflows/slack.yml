@@ -13,9 +13,9 @@ jobs:
       - uses: actions/checkout@v2
       - id: set_command
         run: |
-          channel=`cat .github/slack-id.json`
-          echo $channel | jq .${{ github.event.pull_request.user.login }}
-          echo "::set-output name=user::$channel"
+          user=`cat .github/slack-id.json`
+          echo $user | jq .${{ github.event.pull_request.user.login }}
+          echo "::set-output name=user::$user"
 
   slack:
     runs-on: ubuntu-latest
