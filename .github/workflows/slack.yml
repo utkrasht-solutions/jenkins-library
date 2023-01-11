@@ -23,7 +23,7 @@ jobs:
           username=${{ github.event.pull_request.actor }}
           # end of optional handling for multi line json
           echo "::set-output name=packageJson::$content"
-          echo ${{ github.event.pull_request.user.login }}
+          echo "${{ github.event.pull_request.user.login }}"
       - id: set_command
         run: |
           command="steps.set_var.outputs.packageJson."${{ github.event.pull_request.user.login }}
