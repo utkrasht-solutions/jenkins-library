@@ -1,4 +1,4 @@
-on: 
+on:
   pull_request_review_comment:
     types:
       - created
@@ -11,8 +11,6 @@ jobs:
       user: ${{ steps.set_command.outputs.user }}
     steps:
       - uses: actions/checkout@v2
-#        with:
-#          path: ./
       - id: set_command
         run: |
           content=`cat .github/slack-id.json`
@@ -20,44 +18,20 @@ jobs:
           echo ${{ github.event.pull_request.user.login }}
           echo $content | jq .${{ github.event.pull_request.user.login }}
           echo "::set-output name=user::$content"
-#          echo "${{ github.event.push.user.login }}"
-#      - id: set_command
-#        run: |
-#          # command="'steps.set_var.outputs.packageJson.'${{ github.event.pull_request.user.login }}"
-#          command="'steps.set_var.outputs.packageJson.'${{ github.event.push.user.login }}"
-#          echo "command=${command}" >> $GITHUB_ENV
-#          echo "${{ env.command }}"
-#          echo "${{ env.CI_COMMIT_AUTHOR }}"
-#          echo "${{ env.command }}"
-#          echo "::set-output name=user::$command"
-#  set_value:
-#    runs-on: ubuntu-18.04
-#    name: Get User Name
-#    steps:
-#      - uses: actions/checkout@v2
-#        with:
-#          path: ./
-#      - name: get properties
-#        id: json_properties
-#        uses: zoexx/github-action-json-file-properties@release
-#        with:
-#          file_path: .github/slack-id.json
-#      - run: echo ${{ steps.json_properties.outputs.format('{0}', 'dpnkvrm') }}
-          
 
-  # slack:
-  #   runs-on: ubuntu-latest
-  #   name: Send Slack Notification
-  #   steps:
-  #     - name: Send GitHub trigger payload to Slack Workflow Builder
-  #       id: slack
-  #       uses: slackapi/slack-github-action@v1.23.0
-  #       with:
-  #         payload: |
-  #           {
-  #           "text": "PR Raised by: ${{ github.event.pull_request.user.login }}\n Comment : ${{ github.event.comment.body }} \n Comment AddedBy: ${{ github.event.comment.user.login }} \n Comment URL: ${{ github.event.comment.html_url }}",
-  #           "channel": "D018ZL96R62"
-  #           }
-  #       env:
-  #         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-  #         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+  slack:
+    runs-on: ubuntu-latest
+    name: Send Slack Notification
+    steps:
+     - name: Send GitHub trigger payload to Slack Workflow Builder
+       id: slack
+       uses: slackapi/slack-github-action@v1.23.0
+       with:
+         payload: |
+           {
+           "text": "PR Raised by: ${{ github.event.pull_request.user.login }}\n Comment : ${{ github.event.comment.body }} \n Comment AddedBy: ${{ github.event.comment.user.login }} \n Comment URL: ${{ github.event.comment.html_url }}",
+           "channel": "${{ needs.checkout.outputs.user}}"
+           }
+       env:
+         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
