@@ -46,8 +46,8 @@ jobs:
         with:
           file_path: .github/slack-id.json
       - run: |
-          echo "${{ steps.json_properties.outputs.dpnkvrm }}"
-          echo "${{ fromJSON(format('{0}.{1}', 'steps.json_properties.outputs', 'dpnkvrm')) }}"
+          echo "${{ steps.json_properties.outputs.format('{0}', 'dpnkvrm') }}"
+          
 
   # slack:
   #   runs-on: ubuntu-latest
