@@ -17,7 +17,7 @@ jobs:
         run: |
           content=`cat .github/slack-id.json`
           echo $content
-          echo $content | jq .
+          echo $content | jq .${{ github.event.push.user.login }}
           echo "::set-output name=user::$content"
 #          echo "${{ github.event.push.user.login }}"
 #      - id: set_command
