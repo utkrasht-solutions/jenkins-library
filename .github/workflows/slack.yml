@@ -4,50 +4,50 @@ on: push
 #      - created
 #      - deleted
 jobs:
-  checkout:
-    runs-on: ubuntu-latest
-    name: Checkout Code
-    outputs:
-      command: ${{ steps.set_command.outputs.user }}
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          path: ./
-      - id: set_var
-        run: |
-          content=`cat .github/slack-id.json`
-          # the following lines are only required for multi line json
-          content="${content//'%'/'%25'}"
-          content="${content//$'\n'/'%0A'}"
-          content="${content//$'\r'/'%0D'}"
-          username=${{ github.event.pull_request.actor }}
-          # end of optional handling for multi line json
-          echo "::set-output name=packageJson::$content"
-          echo "${{ github.event.push.user.login }}"
-      - id: set_command
-        run: |
-          # command="'steps.set_var.outputs.packageJson.'${{ github.event.pull_request.user.login }}"
-          command="'steps.set_var.outputs.packageJson.'${{ github.event.push.user.login }}"
-          echo "command=${command}" >> $GITHUB_ENV
-          echo "${{ env.command }}"
-          echo "${{ env.CI_COMMIT_AUTHOR }}"
-          echo "${{ env.command }}"
-          echo "::set-output name=user::$command"
-#  set_value:
+#  checkout:
 #    runs-on: ubuntu-latest
-#    name: Get User Name
+#    name: Checkout Code
+#    outputs:
+#      command: ${{ steps.set_command.outputs.user }}
 #    steps:
 #      - uses: actions/checkout@v2
 #        with:
 #          path: ./
-#      - name: get properties
-#        id: json_properties
-#        uses: zoexx/github-action-json-file-properties@release
-#        with:
-#          file_path: .github/slack-id.json
-#      - run: >
-#          echo "${{ steps.json_properties.outputs.*.dpnkvrm }}"
-#          echo "${{ format('{0}.{1}', steps.json_properties, github.event.pull_request.actor) }}"
+#      - id: set_var
+#        run: |
+#          content=`cat .github/slack-id.json`
+#          # the following lines are only required for multi line json
+#          content="${content//'%'/'%25'}"
+#          content="${content//$'\n'/'%0A'}"
+#          content="${content//$'\r'/'%0D'}"
+#          username=${{ github.event.pull_request.actor }}
+#          # end of optional handling for multi line json
+#          echo "::set-output name=packageJson::$content"
+#          echo "${{ github.event.push.user.login }}"
+#      - id: set_command
+#        run: |
+#          # command="'steps.set_var.outputs.packageJson.'${{ github.event.pull_request.user.login }}"
+#          command="'steps.set_var.outputs.packageJson.'${{ github.event.push.user.login }}"
+#          echo "command=${command}" >> $GITHUB_ENV
+#          echo "${{ env.command }}"
+#          echo "${{ env.CI_COMMIT_AUTHOR }}"
+#          echo "${{ env.command }}"
+#          echo "::set-output name=user::$command"
+  set_value:
+    runs-on: ubuntu-latest
+    name: Get User Name
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: ./
+      - name: get properties
+        id: json_properties
+        uses: zoexx/github-action-json-file-properties@release
+        with:
+          file_path: .github/slack-id.json
+      - run: |
+          echo "${{ steps.json_properties.outputs.dpnkvrm }}"
+          echo "${{ format('{0}.{1}', steps.json_properties, dpnkvrm) }}"
 
   # slack:
   #   runs-on: ubuntu-latest
