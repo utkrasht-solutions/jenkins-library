@@ -22,15 +22,16 @@ jobs:
     name: Send Slack Notification
     needs: checkout
     steps:
-     - name: Send GitHub trigger payload to Slack Workflow Builder
-       id: slack
-       uses: slackapi/slack-github-action@v1.23.0
-       with:
-         payload: |
-           {
-           "text": "PR Raised by: ${{ github.event.pull_request.user.login }}\n Comment : ${{ github.event.comment.body }} \n Comment AddedBy: ${{ github.event.comment.user.login }} \n Comment URL: ${{ github.event.comment.html_url }}",
-           "channel": ${{ needs.checkout.outputs.user }}
-           }
-       env:
-         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+      - run: echo ${{ needs.checkout.outputs.user }}
+      - name: Send GitHub trigger payload to Slack Workflow Builder
+        id: slack
+        uses: slackapi/slack-github-action@v1.23.0
+        with:
+          payload: |
+            {
+            "text": "PR Raised by: ${{ github.event.pull_request.user.login }}\n Comment : ${{ github.event.comment.body }} \n Comment AddedBy: ${{ github.event.comment.user.login }} \n Comment URL: ${{ github.event.comment.html_url }}",
+            "channel": "${{ needs.checkout.outputs.user }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
