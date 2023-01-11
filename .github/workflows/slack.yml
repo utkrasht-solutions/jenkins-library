@@ -24,7 +24,7 @@ jobs:
           echo ${{ github.event.pull_request.user.login }}
       - id: set_command
         outputs:
-          command: ${{ }}
+          command: ${{ steps.set_command.outputs.user }}
         run: >
           command="steps.set_var.outputs.packageJson."${{ github.event.pull_request.user.login }}
           echo "command=${command}" >> $GITHUB_ENV
