@@ -14,15 +14,16 @@ jobs:
       - id: set_command
         run: |
           user=`cat .github/slack-id.json`
-          echo $user | jq .${{ github.event.pull_request.user.login }}
-          echo "::set-output name=user::$user"
+          channel=`echo $user | jq .${{ github.event.pull_request.user.login }}`
+          echo $channel
+          echo "::set-output name=user::$channel"
   output:
     runs-on: ubuntu-latest
     needs: checkout
     name: Check output from checkout
     steps:
       - run: echo ${{ needs.checkout.outputs.user }}
-        
+
   slack:
     runs-on: ubuntu-latest
     name: Send Slack Notification
