@@ -34,7 +34,7 @@ jobs:
 #          echo "${{ env.command }}"
 #          echo "::set-output name=user::$command"
   set_value:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     name: Get User Name
     steps:
       - uses: actions/checkout@v2
