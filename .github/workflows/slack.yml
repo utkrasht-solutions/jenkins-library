@@ -27,8 +27,8 @@ jobs:
       - id: set_command
         run: |
           command="steps.set_var.outputs.packageJson."${{ github.event.pull_request.user.login }}
-          echo "command=${command}" >> $GITHUB_ENV"
-          echo ${command}
+          echo "command=${command}" >> $GITHUB_ENV
+          echo ${{ env.command }}
           echo ${{ env.CI_COMMIT_AUTHOR }}
           echo ${{ env.command }}
           echo ${{ fromJSON(format('{0}', env.command)) }}
