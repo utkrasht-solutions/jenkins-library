@@ -1,8 +1,8 @@
-on:
-  pull_request_review_comment:
-    types:
-      - created
-      - deleted
+on: push
+#  pull_request_review_comment:
+#    types:
+#      - created
+#      - deleted
 jobs:
   checkout:
     runs-on: ubuntu-latest
@@ -32,21 +32,21 @@ jobs:
           echo ${{ env.command }}
           echo ${{ fromJSON(format('{0}', env.command)) }}
           echo "::set-output name=user::$command"
-  set_value:
-    runs-on: ubuntu-latest
-    name: Get User Name
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          path: ./
-      - name: get properties
-        id: json_properties
-        uses: zoexx/github-action-json-file-properties@release
-        with:
-          file_path: .github/slack-id.json
-      - run: >
-          echo "${{ steps.json_properties.outputs.*.dpnkvrm }}"
-          echo "${{ format('{0}.{1}', steps.json_properties, github.event.pull_request.actor) }}"
+#  set_value:
+#    runs-on: ubuntu-latest
+#    name: Get User Name
+#    steps:
+#      - uses: actions/checkout@v2
+#        with:
+#          path: ./
+#      - name: get properties
+#        id: json_properties
+#        uses: zoexx/github-action-json-file-properties@release
+#        with:
+#          file_path: .github/slack-id.json
+#      - run: >
+#          echo "${{ steps.json_properties.outputs.*.dpnkvrm }}"
+#          echo "${{ format('{0}.{1}', steps.json_properties, github.event.pull_request.actor) }}"
 
   # slack:
   #   runs-on: ubuntu-latest
